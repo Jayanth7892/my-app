@@ -1,4 +1,5 @@
-import { useState } from 'react'
+
+import { useEffect, useState } from 'react'
 import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
@@ -6,9 +7,52 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [theme, setTheme] = useState(() =>
+    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+  )
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+  }, [theme])
 
   return (
     <>
+      <header className="navbar">
+        <a className="navbar-brand" href="#center">
+          <span className="navbar-brand-mark" aria-hidden="true">
+            {'</>'}
+          </span>
+          <span>React + Vite</span>
+        </a>
+        <nav className="navbar-links" aria-label="Main navigation">
+          <a href="#center">Home</a>
+          <a href="#docs">Docs</a>
+          <a href="#social">Community</a>
+        </nav>
+        <button
+          type="button"
+          className="theme-toggle"
+          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          onClick={() =>
+            setTheme((currentTheme) =>
+              currentTheme === 'dark' ? 'light' : 'dark',
+            )
+          }
+        >
+          {theme === 'dark' ? (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z" />
+            </svg>
+          )}
+        </button>
+      </header>
+
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
